@@ -1,43 +1,49 @@
 <template>
-  <div class="min-h-screen text-center p-10">
-    <h1 class="text-3xl font-bold text-blue-900 mb-2">🎉 欢迎，{{ name }}！</h1>
-    <p class="text-gray-600 mb-6">你的工号是 {{ employeeId }}</p>
+  <div class="min-h-screen bg-gray-50 px-4 py-6">
+    <div class="max-w-screen-md mx-auto">
+      <h1 class="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 text-center">🎉 欢迎，{{ name }}！</h1>
+      <p class="text-gray-600 mb-6 text-center">你的工号是 {{ employeeId }}</p>
 
-    <div class="space-x-4 mb-8">
-      <!-- <button @click="fetchRounds" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">查询每轮成绩</button> -->
-      <button @click="fetchRounds">查询每轮成绩</button>
-      <!-- <button @click="fetchSummary" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">查询总成绩</button> -->
-      <button @click="fetchSummary">查询总成绩</button>
-      <!-- <button @click="startQuiz" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">开始下一轮</button> -->
-      <button @click="startQuiz">开始下一轮</button>
-      <!-- <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">退出</button> -->
-      <button @click="logout">退出</button>
-    </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 text-center">
+        <button @click="fetchRounds">每轮成绩</button>
+        <button @click="fetchSummary">总成绩</button>
+        <button @click="startQuiz">下一轮</button>
+        <button @click="logout">退出</button>
+      </div>
 
-    <div v-if="showRounds" class="bg-white p-6 rounded shadow max-w-4xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4 text-left">每轮成绩</h2>
-      <div v-for="(r, i) in rounds" :key="i" class="mb-6 text-left">
-        <h3 class="text-lg font-semibold mb-2">第 {{ i + 1 }} 轮</h3>
-        <div class="grid grid-cols-11 gap-2 items-center">
-          <div v-for="(isCorrect, idx) in r.result" :key="idx"
-               :class="isCorrect ? 'text-green-600 border-green-300 bg-green-50' : 'text-red-600 border-red-300 bg-red-50'"
-               class="w-10 h-10 flex items-center justify-center rounded-md font-bold border">
-            {{ isCorrect ? '✔️' : '✘' }}
-          </div>
-          <div class="w-10 h-10 flex items-center justify-center rounded-md font-bold bg-blue-100 text-blue-800 border border-blue-300">
-            {{ r.score }}
+      <!-- 每轮成绩 -->
+      <div v-if="showRounds" class="bg-white p-6 rounded shadow-md">
+        <h2 class="text-xl font-bold mb-4">每轮成绩</h2>
+        <div v-for="(r, i) in rounds" :key="i" class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">第 {{ i + 1 }} 轮</h3>
+          <div class="grid grid-cols-5 sm:grid-cols-11 gap-2">
+            <div
+              v-for="(isCorrect, idx) in r.result"
+              :key="idx"
+              :class="isCorrect ? 'text-green-600 border-green-300 bg-green-50' : 'text-red-600 border-red-300 bg-red-50'"
+              class="w-10 h-10 flex items-center justify-center rounded-md font-bold border text-sm"
+            >
+              {{ isCorrect ? '✔️' : '✘' }}
+            </div>
+            <div class="w-10 h-10 flex items-center justify-center rounded-md font-bold bg-blue-100 text-blue-800 border border-blue-300">
+              {{ r.score }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="showSummary" class="mt-8 max-w-4xl mx-auto">
-      <h2 class="text-2xl font-bold mb-4 text-left">汇总成绩</h2>
-      <canvas id="barChart" class="mb-6"></canvas>
-      <canvas id="pieChart" class="mb-6"></canvas>
-      <div class="grid grid-cols-4 gap-4 text-center font-bold text-gray-700">
-        <div v-for="(s, idx) in summary.scores" :key="idx" class="p-2 bg-white rounded shadow">
-          第{{ idx + 1 }}轮<br /><span class="text-xl text-blue-600">{{ s }} 分</span>
+      <!-- 汇总成绩 -->
+      <div v-if="showSummary" class="mt-8 bg-white p-6 rounded shadow-md">
+        <h2 class="text-xl font-bold mb-4">汇总成绩</h2>
+        <div class="space-y-6">
+          <canvas id="barChart" class="w-full max-w-xl mx-auto"></canvas>
+          <canvas id="pieChart" class="w-full max-w-xs mx-auto"></canvas>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center font-bold text-gray-700 mt-6">
+          <div v-for="(s, idx) in summary.scores" :key="idx" class="p-4 bg-white rounded shadow">
+            第{{ idx + 1 }}轮<br />
+            <span class="text-xl text-blue-600">{{ s }} 分</span>
+          </div>
         </div>
       </div>
     </div>
