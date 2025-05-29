@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply font-sans bg-white text-gray-900;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  h1, h2 {
+    @apply text-blue-900 font-bold;
+  }
+
+  a {
+    @apply text-blue-700 hover:underline;
+  }
+
+  button {
+    @apply bg-blue-900 text-white rounded-full px-6 py-2 hover:bg-[#1c3551] transition;
+  }
+}
